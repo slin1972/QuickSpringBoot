@@ -3,6 +3,7 @@ package com.zeroxy.study.service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.zeroxy.CommonResult;
 import com.zeroxy.study.result.ResponseCode;
+import com.zeroxy.study.result.ReturnCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class SMSHystrixService {
    */
   @HystrixCommand(fallbackMethod = "fallback")
   public CommonResult send(String key, SMSContent body) {
-    CommonResult response = restTemplate.postForObject("http://<host>/v1/sms?key=" + key, body, CommonResult.class);
+    CommonResult response = restTemplate.postForObject("http://smsapi.devondtech.com/v1/sms?key=" + key, body, CommonResult.class);
     LOGGER.info(response.toString());
     return response ;
   }
@@ -38,7 +39,7 @@ public class SMSHystrixService {
    */
   public CommonResult fallback(String key, SMSContent body) {
     LOGGER.info("异常发生，进入fallback方法，接收的参数：key = {}, body = {}", key, body);
-    return ResponseCode.ERROR_999;
+    return ReturnCode.ERROR_999;
   }
 
   public static class SMSContent{
