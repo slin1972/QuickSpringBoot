@@ -1,4 +1,4 @@
-package com.zeroxy.study.controller;
+package com.zeroxy.study.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zeroxy.study.domain.User;
 import com.zeroxy.study.repository.UserRepository;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * 作用：
@@ -36,6 +39,15 @@ public class UserController {
     return findOne;
   }
 
+
+    @GetMapping("/users")
+    public ModelAndView view() {
+      List<User> users = this.userRepository.findAll();
+      ModelAndView modelAndView = new ModelAndView("list");
+      modelAndView.addObject("users", users);
+      return modelAndView;
+    }
+
   /**
    * 本地服务实例的信息
    * @return
@@ -45,4 +57,5 @@ public class UserController {
     ServiceInstance localServiceInstance = this.discoveryClient.getLocalServiceInstance();
     return localServiceInstance;
   }
+
 }
